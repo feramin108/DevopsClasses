@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const RateLimit = require('express-rate-limit');
 const app = express(),
       bodyParser = require("body-parser");
       port = 3080;
@@ -7,6 +8,11 @@ const app = express(),
 // place holder for the data
 const users = [];
 
+const limiter = RateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // max 100 requests per windowMs
+});
+app.use(limiter);
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../my-app/build')));
 
